@@ -1,30 +1,71 @@
-Sistema Bancário em Python v2
+Sistema Bancário em Python (V3 - Orientado a Objetos)
+📜 Descrição do Projeto
+Este projeto é uma simulação de um sistema bancário interativo via terminal, desenvolvido em Python. O sistema evoluiu de uma abordagem puramente procedural para uma arquitetura robusta e modular utilizando os princípios da Programação Orientada a Objetos (POO).
 
-📖 Sobre
-Este projeto é a segunda versão de um sistema bancário simples, desenvolvido como parte de um desafio de programação em Python. O objetivo principal foi refatorar um script inicial monolítico, transformando-o em um sistema modularizado e baseado em funções. O desafio também incluiu a implementação de novas funcionalidades e a aplicação de regras específicas na passagem de argumentos para cada função, explorando conceitos como positional-only e keyword-only arguments.
+O objetivo é demonstrar a aplicação de conceitos de POO como classes, objetos, herança, encapsulamento e abstração para criar um software mais organizado, reutilizável e fácil de manter.
 
-💻 Desafio Proposto
-O desenvolvimento foi guiado pelos seguintes requisitos:
+✨ Funcionalidades Principais
+O sistema permite que os usuários realizem as seguintes operações:
 
-Modularização: Separar as operações de saque, depósito e extrato em funções distintas.
-Novas Funcionalidades:
-Criar Usuário (Cliente): Armazenar usuários em uma lista, impedindo o cadastro de CPFs duplicados.
+Gestão de Clientes e Contas:
 
-Criar Conta Corrente: Armazenar contas em uma lista, vinculando cada conta a um usuário. Uma conta pertence a um único usuário, mas um usuário pode ter múltiplas contas.
+[nu] - Criar novos usuários (clientes).
 
-Regras Específicas para Funções:
-Depósito: A função deve receber os argumentos apenas por posição (positional-only).
-Saque: A função deve receber os argumentos apenas por nome (keyword-only).
-Extrato: A função deve receber argumentos por posição e nome (um argumento posicional e outro nomeado).
+[nc] - Criar novas contas correntes, que são automaticamente vinculadas a um usuário existente.
 
-✨ Funcionalidades
-Depositar: Adiciona valores à conta do usuário.
-Sacar: Permite o saque de valores, respeitando um limite de R$ 500,00 por saque e um máximo de 3 saques diários.
-Exibir Extrato: Mostra o histórico de transações e o saldo atual da conta.
-Criar Novo Usuário: Cadastra um novo cliente com nome, data de nascimento, CPF e endereço.
-Criar Nova Conta Corrente: Cria uma nova conta, associada a um usuário já cadastrado. O número da agência é fixo ("0001") e o número da conta é sequencial.
-Listar Contas Cadastradas: Exibe uma lista com todas as contas e seus respectivos titulares.
+[lc] - Listar todas as contas cadastradas no sistema.
 
-🚀 Como Executar o Projeto
-Pré-requisitos
-Antes de começar, você vai precisar ter o Python 3 instalado em sua máquina.
+Operações Bancárias:
+
+[d] - Realizar depósitos em contas.
+
+[s] - Efetuar saques, com validações de saldo, limite por saque e número máximo de saques diários.
+
+[e] - Exibir um extrato detalhado com todas as transações realizadas e o saldo atual da conta.
+
+Configurações da Conta:
+
+[al] - (Nova Funcionalidade) - Permitir que o cliente altere seu próprio limite de valor por saque.
+
+🚀 Novidades na Versão 3
+Esta versão representa uma refatoração completa do sistema, focando na implementação de um modelo orientado a objetos. As principais atualizações são:
+
+Refatoração para POO: O código foi reestruturado com classes para modelar as entidades do sistema:
+
+Cliente e PessoaFisica: Para representar os usuários do banco.
+
+Conta e ContaCorrente: Para encapsular os dados (saldo, agência, etc.) e os comportamentos (sacar, depositar) de uma conta.
+
+Historico: Uma classe dedicada a gerenciar o histórico de transações de cada conta.
+
+Transacao, Saque, Deposito: Classes que utilizam abstração para modelar os diferentes tipos de transações.
+
+Nova Funcionalidade - Alterar Limite de Saque: Foi adicionada a opção [al] ao menu, permitindo ao usuário definir um novo valor para seu limite de saque, dando mais flexibilidade e controle sobre a conta.
+
+Código Mais Limpo e Escalável: A lógica de negócios agora está encapsulada dentro dos métodos das classes, tornando a função main e as funções auxiliares mais limpas e focadas em orquestrar as interações entre os objetos.
+
+🛠️ Tecnologias Utilizadas
+Python 3: Linguagem principal do projeto.
+
+Módulos Nativos:
+
+textwrap: Para formatação do menu de texto.
+
+datetime: Para registrar a data e hora de cada transação.
+
+abc: Para a criação de Classes Base Abstratas (Transacao).
+
+⚙️ Como Executar
+1 Certifique-se de ter o Python 3 instalado em sua máquina.
+
+2 Clone este repositório ou baixe o arquivo sistema_bancario_v3.py.
+
+3 Abra um terminal ou prompt de comando na pasta onde o arquivo está localizado.
+
+4 Execute o seguinte comando:
+
+Bash
+
+python sistema_bancario_v3.py
+
+5 Siga as instruções apresentadas no menu interativo.
