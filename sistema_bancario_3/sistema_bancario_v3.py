@@ -1,6 +1,55 @@
 import textwrap
 from abc import ABC, abstractclassmethod, abstractproperty
 from datetime import datetime
+import functools
+
+# ===================================================================
+# DECORATOR DE LOG (NOVO)
+# ===================================================================
+
+def log_transacao(func):
+    """
+    Decorator que registra informações sobre a execução de uma função em log.txt.
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        """
+        Função interna (wrapper) que adiciona a funcionalidade de log.
+        """
+        # Requisito 1: Data e hora atuais
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Requisito 3: Argumentos da função
+        # Tenta criar uma representação legível dos argumentos
+        try:
+            argumentos_str = f"Args: {args}, Kwargs: {kwargs}"
+        except Exception:
+            argumentos_str = "Args: (não foi possível representar os argumentos)"
+        
+        # Executa a função original e captura seu retorno
+        try:
+            resultado = func(*args, **kwargs)
+            # Requisito 4: Valor retornado pela função
+            resultado_str = f"Retorno: {resultado}"
+        except Exception as e:
+            resultado = f"Erro: {e}"
+            resultado_str = f"Retorno: {resultado}"
+            raise # Re-levanta a exceção para não alterar o comportamento do programa
+
+        # Requisito 2: Nome da função
+        nome_funcao = func.__name__
+
+        # Monta a entrada de log completa
+        log_entry = f"[{timestamp}] - Função '{nome_funcao}' | {argumentos_str} | {resultado_str}\n"
+
+        # Requisito 5 e 6: Escreve no arquivo log.txt em modo de "append"
+        with open("log.txt", "a", encoding="utf-8") as f:
+            # Requisito 7: Cada entrada em uma nova linha
+            f.write(log_entry)
+            
+        return resultado
+    return wrapper
+
 
 # ===================================================================
 # BLOCO DE CLASSES (A ESTRUTURA ORIENTADA A OBJETOS)
@@ -116,7 +165,6 @@ class ContaCorrente(Conta):
 
         return False
 
-    ### NOVO - Método para alterar o limite de saque ###
     def definir_novo_limite_saque(self, novo_limite):
         """Permite ao cliente alterar o limite máximo por saque."""
         if novo_limite > 0:
@@ -201,7 +249,6 @@ class Deposito(Transacao):
 
 def menu():
     """Exibe o menu de opções para o usuário."""
-    ### MODIFICADO - Adicionada a nova opção [al] ###
     menu_texto = """
     ================== MENU =====================
     Bem vindo ao Cash Bank🪙
@@ -233,6 +280,7 @@ def recuperar_conta_cliente(cliente):
     return cliente.contas[0]
 
 
+@log_transacao
 def depositar(clientes):
     """Função para orquestrar a operação de depósito."""
     cpf = input("Informe o CPF do cliente: ")
@@ -250,6 +298,7 @@ def depositar(clientes):
         cliente.realizar_transacao(conta, transacao)
 
 
+@log_transacao
 def sacar(clientes):
     """Função para orquestrar a operação de saque."""
     cpf = input("Informe o CPF do cliente: ")
@@ -267,6 +316,7 @@ def sacar(clientes):
         cliente.realizar_transacao(conta, transacao)
 
 
+@log_transacao
 def exibir_extrato(clientes):
     """Função para orquestrar a exibição do extrato."""
     cpf = input("Informe o CPF do cliente: ")
@@ -342,7 +392,8 @@ def listar_contas(contas):
         print(textwrap.dedent(str(conta)))
         print("-" * 45)
 
-### NOVO - Função para orquestrar a alteração do limite ###
+
+@log_transacao
 def alterar_limite_saque(clientes):
     """Função para orquestrar a alteração do limite de saque."""
     cpf = input("Informe o CPF do cliente: ")
@@ -356,7 +407,6 @@ def alterar_limite_saque(clientes):
     if not conta:
         return
 
-    # Garante que estamos lidando com uma ContaCorrente
     if not isinstance(conta, ContaCorrente):
         print("\n❌ Operação não disponível para este tipo de conta.")
         return
@@ -385,7 +435,6 @@ def main():
         elif opcao == "e":
             exibir_extrato(clientes)
         
-        ### MODIFICADO - Adicionada a chamada para a nova função ###
         elif opcao == "al":
             alterar_limite_saque(clientes)
 
